@@ -1,0 +1,48 @@
+name: Update Kakeibo
+
+on:
+  schedule:
+    - cron: "0 0 * * *"   # 毎日0時に実行
+  workflow_dispatch:       # 手動実行も可能
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          pip install gspread oauth2client
+
+      - name: Run update script
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
+        run: |
+          python3 << 'EOF'
+import json
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+
+# Google 認証
+creds_json = json.loads("""${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}""")
+scope = ["https://www.googleapis.com/auth/spreadsheets"]
+creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_json, scope)
+client = gspread.authorize(creds)
+
+# スプレッドシート取得
+sheet = client.open_by_key("${{ secrets.SPREADSHEET_ID }}").sheet1
+
+# 例として A1 に「更新しました」を書く
+sheet.update_acell("A1", "更新しました")
+
+EOF
+

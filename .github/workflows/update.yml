@@ -45,4 +45,3 @@ sheet = client.open_by_key("${{ secrets.SPREADSHEET_ID }}").sheet1
 sheet.update_acell("A1", "更新しました")
 
 EOF
-

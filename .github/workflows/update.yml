@@ -28,15 +28,15 @@ jobs:
           SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
         run: |
           python3 << 'EOF'
-　　import json
-　　import gspread
-　　from oauth2client.service_account import ServiceAccountCredentials
+　　　　　import json
+　　　　　import gspread
+　　　　　from oauth2client.service_account import ServiceAccountCredentials
 
-creds_json = json.loads("""${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}""")
-scope = ["https://www.googleapis.com/auth/spreadsheets"]
-creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_json, scope)
-client = gspread.authorize(creds)
+　　　　　creds_json = json.loads("""${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}""")
+　　　　　scope = ["https://www.googleapis.com/auth/spreadsheets"]
+　　　　　creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_json, scope)
+　　　　　client = gspread.authorize(creds)
 
-sheet = client.open_by_key("${{ secrets.SPREADSHEET_ID }}").sheet1
-sheet.update_acell("A1", "更新しました")
+　　　　　sheet = client.open_by_key("${{ secrets.SPREADSHEET_ID }}").sheet1
+　　　　　sheet.update_acell("A1", "更新しました")
 EOF

@@ -21,6 +21,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install gspread oauth2client
+
       - name: Run update script
         env:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
@@ -39,6 +40,3 @@ jobs:
           sheet = client.open_by_key("${{ secrets.SPREADSHEET_ID }}").sheet1
           sheet.update_acell("A1", "更新しました")
 EOF
-
-     
- 
